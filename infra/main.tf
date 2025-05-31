@@ -28,5 +28,5 @@ resource "aws_lambda_function" "lambda_function" {
   runtime       = "nodejs18.x"
 
   source_code_hash = filebase64sha256("../lambda/lambda.zip")
-  filename         = "lambda.zip"
+  filename         = "../lambda/lambda.zip"
 }
