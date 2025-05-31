@@ -61,6 +61,11 @@ jobs:
           cd lambda
           zip -r ../lambda.zip .
 
+      - name: Clist Lambda package
+        run: |
+          cd lambda
+          ls
+
       - name: Terraform Init
         run: |
           cd infra && terraform init \
