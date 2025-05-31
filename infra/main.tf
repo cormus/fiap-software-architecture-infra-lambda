@@ -1,8 +1,3 @@
-
-provider "aws" {
-  region = var.aws_region // Altere para sua região
-}
-
 resource "aws_iam_role" "lambda_role" {
   name = "lambda-role"
 
