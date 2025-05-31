@@ -1,0 +1,20 @@
+name: "DEPLOY DATABASE"
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yaml
+    with:
+      environment: lambda
+      aws-assume-role-arn: "arn:aws:iam::881307377501:role/github-actions-fiap-pipelike"
+      aws-region: "us-east-2"
+      aws-statefile-s3-bucket: "cormus-fiap-kubernetes-s3-infra"
+      aws-lock-dynamodb-table: "cormus-fiap-kubernetes-dinamodb-infra"

@@ -1,0 +1,19 @@
+{
+  "name": "lambda-login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: sem testes especificados\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Alex Ribeiro",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.812.0",
+    "@aws-sdk/rds-signer": "^3.812.0",
+    "aws-sdk": "^2.1692.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.14.1"
+  }
+}
