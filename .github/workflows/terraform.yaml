@@ -59,7 +59,7 @@ jobs:
       - name: Create Lambda package .zip
         run: |
           cd lambda
-          zip -r ../lambda.zip .
+          zip -r lambda.zip .
 
       - name: Clist Lambda package
         run: |
