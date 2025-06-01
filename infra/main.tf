@@ -83,7 +83,7 @@ resource "aws_api_gateway_integration" "rest_integration" {
 
   request_templates = {
     "application/json" = <<EOF
-{"cpf": "$input.params('cpf')"}
+{"cpf": $input.params("cpf")}
 EOF
   }
     
