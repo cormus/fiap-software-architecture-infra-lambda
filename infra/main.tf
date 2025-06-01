@@ -76,6 +76,10 @@ resource "aws_api_gateway_integration" "rest_integration" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.lambda_function.invoke_arn
+
+  request_parameters = {
+    "integration.request.querystring.cpf" = "method.request.querystring.cpf"
+  }
 }
 
 resource "aws_api_gateway_deployment" "rest_deployment" {
