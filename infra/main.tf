@@ -47,6 +47,15 @@ resource "aws_api_gateway_resource" "rest_resource" {
   path_part   = "cpf"
 }
 
+
+resource "aws_api_gateway_request_validator" "query_validator" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  name        = "ValidateQueryStringAndHeaders"
+
+  validate_request_parameters = true
+  validate_request_body       = false
+}
+
 resource "aws_api_gateway_method" "rest_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.rest_resource.id
@@ -56,6 +65,8 @@ resource "aws_api_gateway_method" "rest_method" {
   request_parameters = {
     "method.request.querystring.cpf" = true
   }
+
+  request_validator_id = aws_api_gateway_request_validator.query_validator.id
 }
 
 resource "aws_api_gateway_integration" "rest_integration" {
