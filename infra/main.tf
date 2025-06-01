@@ -36,31 +36,44 @@ resource "aws_lambda_function" "lambda_function" {
 # -------- API Gateway HTTP API --------
 
 
-resource "aws_apigatewayv2_api" "http_api" {
-  name          = "lambda-api-gateway"
-  description   = "API gateway para login sistema lanchonete"
-  protocol_type = "REST"
+resource "aws_api_gateway_rest_api" "rest_api" {
+  name        = "lanchonete-loginlambda-rest-api"
+  description = "API Gateway REST para login sistema lanchonete"
 }
 
-resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id           = aws_apigatewayv2_api.http_api.id
-  integration_type = "AWS_PROXY"
-  integration_uri  = aws_lambda_function.lambda_function.arn
+resource "aws_api_gateway_resource" "rest_resource" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
+  path_part   = "cpf"
 }
 
-resource "aws_apigatewayv2_route" "http_route" {
-  api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "GET /"
-
-  target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+resource "aws_api_gateway_method" "rest_method" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_resource.rest_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
 }
 
-resource "aws_apigatewayv2_stage" "default_stage" {
-  api_id      = aws_apigatewayv2_api.http_api.id
-  name        = "default"
-  auto_deploy = true
+resource "aws_api_gateway_integration" "rest_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.rest_api.id
+  resource_id             = aws_api_gateway_resource.rest_resource.id
+  http_method             = aws_api_gateway_method.rest_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.lambda_function.invoke_arn
+}
+
+resource "aws_api_gateway_deployment" "rest_deployment" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  depends_on  = [aws_api_gateway_integration.rest_integration]
+}
+
+resource "aws_api_gateway_stage" "rest_stage" {
+  deployment_id = aws_api_gateway_deployment.rest_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  stage_name    = "default"
 }
 
 output "api_gateway_url" {
-  value = aws_apigatewayv2_stage.default_stage.invoke_url
+  value = "${aws_api_gateway_rest_api.rest_api.execution_arn}/default/cpf"
 }
