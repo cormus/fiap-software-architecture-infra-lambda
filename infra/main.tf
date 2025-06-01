@@ -96,3 +96,12 @@ resource "aws_api_gateway_stage" "rest_stage" {
 output "api_gateway_url" {
   value = "${aws_api_gateway_rest_api.rest_api.execution_arn}/default/cpf"
 }
+
+resource "aws_lambda_permission" "api_gateway_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_function.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*"
+}
