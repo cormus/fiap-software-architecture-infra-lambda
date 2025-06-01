@@ -80,6 +80,15 @@ resource "aws_api_gateway_integration" "rest_integration" {
   request_parameters = {
     "integration.request.querystring.cpf" = "method.request.querystring.cpf"
   }
+
+    request_templates = {
+      "application/json" = <<EOF
+        {
+          "cpf": "$input.params('cpf')"
+        }
+      EOF
+    }
+    
 }
 
 resource "aws_api_gateway_deployment" "rest_deployment" {
