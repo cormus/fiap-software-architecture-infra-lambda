@@ -33,6 +33,8 @@ resource "aws_lambda_function" "lambda_function" {
   filename         = "../lambda/lambda.zip"
 }
 
+# -------- API Gateway HTTP API --------
+
 
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "lambda-api-gateway"
