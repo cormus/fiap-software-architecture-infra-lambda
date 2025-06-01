@@ -38,7 +38,8 @@ resource "aws_lambda_function" "lambda_function" {
 
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "lambda-api-gateway"
-  protocol_type = "HTTP"
+  description   = "API gateway para login sistema lanchonete"
+  protocol_type = "REST"
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -49,7 +50,7 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 
 resource "aws_apigatewayv2_route" "http_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "GET /{cpf}"
+  route_key = "GET /"
 
   target = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
