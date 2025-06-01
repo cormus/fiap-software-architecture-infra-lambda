@@ -18,7 +18,7 @@ resource "aws_iam_role" "lambda_role" {
 resource "aws_iam_policy_attachment" "lambda_policy" {
   name       = "lambda-politica"
   roles      = [aws_iam_role.lambda_role.name]
-  policy_arn = "arn:aws:iam::881307377501:role/github-actions-fiap-pipelike"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 # -------- Lambda Function --------
