@@ -52,6 +52,10 @@ resource "aws_api_gateway_method" "rest_method" {
   resource_id   = aws_api_gateway_resource.rest_resource.id
   http_method   = "GET"
   authorization = "NONE"
+
+  request_parameters = {
+    "method.request.querystring.cpf" = true
+  }
 }
 
 resource "aws_api_gateway_integration" "rest_integration" {
