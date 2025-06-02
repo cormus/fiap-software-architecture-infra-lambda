@@ -49,19 +49,23 @@ jobs:
           echo "destroy=$(echo $DESTROY)" >> $GITHUB_OUTPUT
 
       - name: Install zip
+        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: sudo apt-get install -y zip
 
       - name: Install dependencies NPM
+        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: |
           cd lambda
           npm install
 
       - name: Create Lambda package .zip
+        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: |
           cd lambda
           zip -r lambda.zip .
 
       - name: Clist Lambda package
+        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: |
           cd lambda
           ls
@@ -78,22 +82,9 @@ jobs:
         run: terraform validate
 
       - name: Terraform Destroy
-        if: steps.read-destroy-config.outputs.destroy == 'true'
         id: terraform-destroy
         run: cd infra &&
           terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
           terraform destroy -var-file="./terraform.tfvars" -auto-approve
 
-      - name: Terraform Plan
-        if: steps.read-destroy-config.outputs.destroy != 'true'
-        id: terraform-plan
-        run: cd infra &&
-          terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
-          terraform plan -var-file="./terraform.tfvars" -out="${{ inputs.environment }}.plan"
-
-      - name: Terraform Apply
-        if: steps.read-destroy-config.outputs.destroy != 'true'
-        id: terraform-apply
-        run: cd infra &&
-          terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
-          terraform apply "${{ inputs.environment }}.plan"
+      
