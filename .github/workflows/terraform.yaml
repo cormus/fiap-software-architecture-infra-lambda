@@ -49,23 +49,19 @@ jobs:
           echo "destroy=$(echo $DESTROY)" >> $GITHUB_OUTPUT
 
       - name: Install zip
-        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: sudo apt-get install -y zip
 
       - name: Install dependencies NPM
-        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: |
           cd lambda
           npm install
 
       - name: Create Lambda package .zip
-        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: |
           cd lambda
           zip -r lambda.zip .
 
       - name: Clist Lambda package
-        if: steps.read-destroy-config.outputs.destroy != 'true'
         run: |
           cd lambda
           ls
